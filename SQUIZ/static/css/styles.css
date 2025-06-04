@@ -1,0 +1,103 @@
+/* Custom styles for QuizMaster */
+
+/* Category colors */
+.category-argent {
+  background-color: #c0c0c0;
+}
+
+.category-or {
+  background-color: #ffd700;
+}
+
+.category-saphir {
+  background-color: #ff9966;
+}
+
+.category-rubis {
+  background-color: #ff3333;
+}
+
+.category-emeraude {
+  background-color: #66ff66;
+}
+
+.category-diamant {
+  background-color: #66ccff;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.5s ease-in-out;
+}
+
+/* Custom form styles */
+.form-checkbox {
+  @apply rounded border-gray-300 text-primary focus:ring-primary;
+}
+
+.form-radio {
+  @apply border-gray-300 text-primary focus:ring-primary;
+}
+
+/* Custom button styles */
+.btn-primary {
+  @apply bg-primary text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-md hover:bg-gray-300 transition duration-300;
+}
+
+.btn-danger {
+  @apply bg-red-500 text-white font-bold py-2 px-4 rounded-md hover:bg-red-600 transition duration-300;
+}
+
+/* Custom card styles */
+.card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden;
+}
+
+.card-header {
+  @apply bg-primary text-white p-4;
+}
+
+.card-body {
+  @apply p-4;
+}
+
+/* Custom table styles */
+.table-header {
+  @apply bg-gray-100 text-gray-700 uppercase text-sm leading-normal;
+}
+
+.table-row {
+  @apply border-b border-gray-200 hover:bg-gray-50;
+}
+
+.table-cell {
+  @apply py-3 px-6 text-left;
+}

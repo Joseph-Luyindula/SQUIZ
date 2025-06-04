@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil | QuizMaster{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <!-- Profile Header -->
+    <div class="bg-primary text-white p-6">
+        <h1 class="text-2xl font-bold">Profile Utilisateur</h1>
+    </div>
+    
+    <!-- Identity Section -->
+    <div class="p-6">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Left Column - Profile Picture & Basic Info -->
+            <div class="md:w-1/3">
+                <div class="flex flex-col items-center">
+                    <!-- Profile Picture with Category Circle -->
+                    <div class="relative mb-4">
+                        <div class="w-40 h-40 rounded-full overflow-hidden border-4 border-diamant">
+                            <img src="https://via.placeholder.com/300" alt="Profile Picture" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute bottom-0 right-0 bg-diamant text-white font-bold px-3 py-1 rounded-full">S</div>
+                    </div>
+                    
+                    <!-- Username -->
+                    <h2 class="text-2xl font-bold mb-2">JoueurPro1</h2>
+                    
+                    <!-- Rank & Category -->
+                    <div class="flex items-center mb-2">
+                        <span class="bg-diamant text-white text-sm font-bold px-3 py-1 rounded-full mr-2">#1</span>
+                        <span class="text-diamant font-semibold">Diamant</span>
+                    </div>
+                    
+                    <!-- Country -->
+                    <div class="flex items-center mb-4">
+                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
+                        </svg>
+                        <span>France</span>
+                    </div>
+                    
+                    <!-- XP -->
+                    <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
+                        <div class="bg-diamant h-4 rounded-full" style="width: 85%"></div>
+                    </div>
+                    <p class="text-sm font-semibold mb-6">9850 XP</p>
+                </div>
+            </div>
+            
+            <!-- Right Column - Badges & Graph -->
+            <div class="md:w-2/3">
+                <!-- Badges Carousel -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-4">Badges Obtenus</h3>
+                    
+                    <div class="relative">
+                        <!-- Carousel Navigation -->
+                        <button class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 focus:outline-none" id="profile-badges-prev">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <div class="overflow-hidden px-8" id="profile-badges-carousel">
+                            <div class="flex transition-transform duration-500 ease-in-out" id="profile-badges-track">
+                                <!-- Badge Items (Example) -->
+                                {% for badge in "Expert,Rapide,Précis,Persévérant,Explorateur,Champion" %}
+                                <div class="w-1/3 flex-shrink-0 px-2">
+                                    <div class="bg-gray-100 rounded-lg p-3 text-center hover:bg-gray-200 transition duration-300">
+                                        <div class="w-16 h-16 mx-auto mb-2">
+                                            <img src="https://via.placeholder.com/80" alt="{{ badge }}" class="w-full h-full object-contain">
+                                        </div>
+                                        <p class="text-sm font-medium">{{ badge }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <button class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 focus:outline-none" id="profile-badges-next">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Performance Graph -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Progression</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg h-64">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Badges Carousel
+    document.addEventListener('DOMContentLoaded', () => {
+        const track = document.getElementById('profile-badges-track');
+        const prev = document.getElementById('profile-badges-prev');
+        const next = document.getElementById('profile-badges-next');
+        
+        let position = 0;
+        const items = track.children.length;
+        
+        // Calculate how many items to show based on screen width
+        function getItemsToShow() {
+            if (window.innerWidth < 640) return 1; // Mobile
+            if (window.innerWidth < 768) return 2; // Small tablets
+            return 3; // Tablets and Desktop
+        }
+        
+        function updatePosition() {
+            const itemsToShow = getItemsToShow();
+            const maxPosition = items - itemsToShow;
+            position = Math.max(0, Math.min(position, maxPosition));
+            
+            const translateX = position * -100 / itemsToShow;
+            track.style.transform = `translateX(${translateX}%)`;
+            
+            // Update button states
+            prev.disabled = position === 0;
+            next.disabled = position >= maxPosition;
+            
+            prev.style.opacity = position === 0 ? '0.5' : '1';
+            next.style.opacity = position >= maxPosition ? '0.5' : '1';
+        }
+        
+        next.addEventListener('click', () => {
+            position++;
+            updatePosition();
+        });
+        
+        prev.addEventListener('click', () => {
+            position--;
+            updatePosition();
+        });
+        
+        // Initialize
+        updatePosition();
+        
+        // Update on resize
+        window.addEventListener('resize', updatePosition);
+    });
+    
+    // Performance Chart
+    document.addEventListener('DOMContentLoaded', () => {
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil'],
+                datasets: [{
+                    label: 'XP Gagnés',
+                    data: [650, 1200, 1850, 3200, 4500, 7200, 9850],
+                    backgroundColor: 'rgba(0, 102, 204, 0.1)',
+                    borderColor: '#0066cc',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'XP'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Mois'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

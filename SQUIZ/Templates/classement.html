@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Classement | QuizMaster{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <!-- Header -->
+    <div class="bg-primary text-white p-6">
+        <h1 class="text-2xl font-bold">Classement Général</h1>
+        <p class="mt-2">Les meilleurs joueurs de la plateforme</p>
+    </div>
+    
+    <!-- Top 3 Players -->
+    <div class="bg-gray-100 p-6">
+        <div class="flex flex-col md:flex-row justify-center items-end space-y-6 md:space-y-0 md:space-x-8">
+            <!-- 2nd Place -->
+            <div class="order-2 md:order-1">
+                <div class="flex flex-col items-center">
+                    <div class="relative">
+                        <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-emeraude">
+                            <img src="https://via.placeholder.com/150" alt="2nd Place" class="w-full h-full object-cover">
+                        </div>
+                        <span class="absolute bottom-0 right-0 bg-emeraude text-white text-xs font-bold px-2 py-1 rounded-full">A</span>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <p class="font-bold">JoueurPro2</p>
+                        <p class="text-sm text-gray-600">9500 XP</p>
+                    </div>
+                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mt-4">
+                        <span class="text-2xl font-bold">2</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 1st Place -->
+            <div class="order-1 md:order-2">
+                <div class="flex flex-col items-center">
+                    <div class="relative">
+                        <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-diamant">
+                            <img src="https://via.placeholder.com/150" alt="1st Place" class="w-full h-full object-cover">
+                        </div>
+                        <span class="absolute bottom-0 right-0 bg-diamant text-white text-xs font-bold px-2 py-1 rounded-full">S</span>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <p class="font-bold">JoueurPro1</p>
+                        <p class="text-sm text-gray-600">9850 XP</p>
+                    </div>
+                    <div class="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center mt-4">
+                        <span class="text-3xl font-bold">1</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 3rd Place -->
+            <div class="order-3">
+                <div class="flex flex-col items-center">
+                    <div class="relative">
+                        <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-rubis">
+                            <img src="https://via.placeholder.com/150" alt="3rd Place" class="w-full h-full object-cover">
+                        </div>
+                        <span class="absolute bottom-0 right-0 bg-rubis text-white text-xs font-bold px-2 py-1 rounded-full">B</span>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <p class="font-bold">JoueurPro3</p>
+                        <p class="text-sm text-gray-600">9200 XP</p>
+                    </div>
+                    <div class="w-16 h-16 bg-orange-400 rounded-full flex items-center justify-center mt-4">
+                        <span class="text-2xl font-bold">3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Leaderboard Table -->
+    <div class="p-6">
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">Position</th>
+                        <th class="py-3 px-6 text-left">Joueur</th>
+                        <th class="py-3 px-6 text-left">Catégorie</th>
+                        <th class="py-3 px-6 text-left">XP</th>
+                        <th class="py-3 px-6 text-left">Pays</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-600 text-sm">
+                    {% for i in "12345678910" %}
+                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                        <td class="py-3 px-6 text-left">
+                            <span class="font-bold">{{ i }}</span>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            <div class="flex items-center">
+                                <div class="mr-2">
+                                    <img class="w-8 h-8 rounded-full" src="https://via.placeholder.com/150" alt="Player Avatar">
+                                </div>
+                                <span>JoueurPro{{ i }}</span>
+                            </div>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            {% if i == '1' %}
+                            <span class="bg-diamant text-white text-xs font-bold px-2 py-1 rounded-full">Diamant</span>
+                            {% elif i == '2' or i == '3' %}
+                            <span class="bg-emeraude text-white text-xs font-bold px-2 py-1 rounded-full">Émeraude</span>
+                            {% elif i == '4' or i == '5' %}
+                            <span class="bg-rubis text-white text-xs font-bold px-2 py-1 rounded-full">Rubis</span>
+                            {% elif i == '6' or i == '7' %}
+                            <span class="bg-saphir text-white text-xs font-bold px-2 py-1 rounded-full">Saphir</span>
+                            {% elif i == '8' or i == '9' %}
+                            <span class="bg-or text-white text-xs font-bold px-2 py-1 rounded-full">Or</span>
+                            {% else %}
+                            <span class="bg-argent text-white text-xs font-bold px-2 py-1 rounded-full">Argent</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            {% if i == '1' %}9850{% elif i == '2' %}9500{% elif i == '3' %}9200{% else %}{{ 9000|add:"-"|add:forloop.counter0|add:"00" }}{% endif %} XP
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            <span>France</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="flex justify-center mt-6">
+            <nav class="flex items-center space-x-2">
+                <a href="#" class="px-3 py-1 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300">Précédent</a>
+                <a href="#" class="px-3 py-1 rounded-md bg-primary text-white">1</a>
+                <a href="#" class="px-3 py-1 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300">2</a>
+                <a href="#" class="px-3 py-1 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300">3</a>
+                <span class="px-3 py-1">...</span>
+                <a href="#" class="px-3 py-1 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300">10</a>
+                <a href="#" class="px-3 py-1 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300">Suivant</a>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}

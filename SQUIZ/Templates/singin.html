@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title %}Inscription | QuizMaster{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <!-- Header -->
+        <div class="bg-primary text-white p-6">
+            <h1 class="text-2xl font-bold">Inscription</h1>
+            <p class="mt-2">Créez votre compte pour commencer à jouer</p>
+        </div>
+        
+        <!-- Registration Form -->
+        <div class="p-6">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Profile Picture -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Photo de profil</label>
+                    <div class="flex items-center">
+                        <div class="w-20 h-20 rounded-full overflow-hidden bg-gray-200 mr-4">
+                            <img id="profile-preview" src="https://via.placeholder.com/150" alt="Profile Preview" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <label for="profile-picture" class="cursor-pointer bg-primary text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
+                                Choisir une photo
+                            </label>
+                            <input type="file" id="profile-picture" name="profile_picture" class="hidden" accept="image/*">
+                            <p class="text-sm text-gray-500 mt-1">JPG, PNG ou GIF. Max 2MB.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Username -->
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Nom d'utilisateur*</label>
+                        <input type="text" id="username" name="username" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                    </div>
+                    
+                    <!-- Email -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email*</label>
+                        <input type="email" id="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                    </div>
+                    
+                    <!-- First Name -->
+                    <div>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">Prénom*</label>
+                        <input type="text" id="first_name" name="first_name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                    </div>
+                    
+                    <!-- Last Name -->
+                    <div>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Nom*</label>
+                        <input type="text" id="last_name" name="last_name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                    </div>
+                    
+                    <!-- Password -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe*</label>
+                        <input type="password" id="password" name="password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                        <p class="text-xs text-gray-500 mt-1">8 caractères minimum, avec au moins une lettre majuscule, une lettre minuscule et un chiffre.</p>
+                    </div>
+                    
+                    <!-- Confirm Password -->
+                    <div>
+                        <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe*</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                    </div>
+                    
+                    <!-- Date of Birth -->
+                    <div>
+                        <label for="birth_date" class="block text-sm font-medium text-gray-700 mb-1">Date de naissance*</label>
+                        <input type="date" id="birth_date" name="birth_date" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                    </div>
+                    
+                    <!-- Gender -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Sexe</label>
+                        <div class="flex space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="gender" value="male" class="form-radio text-primary">
+                                <span class="ml-2">Homme</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="gender" value="female" class="form-radio text-primary">
+                                <span class="ml-2">Femme</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="gender" value="other" class="form-radio text-primary">
+                                <span class="ml-2">Autre</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Country -->
+                    <div>
+                        <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Pays*</label>
+                        <select id="country" name="country" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                            <option value="">Sélectionnez un pays</option>
+                            <option value="FR">France</option>
+                            <option value="BE">Belgique</option>
+                            <option value="CH">Suisse</option>
+                            <option value="CA">Canada</option>
+                            <!-- Add more countries as needed -->
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Terms and Conditions -->
+                <div class="mt-6">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="terms" required class="form-checkbox text-primary">
+                        <span class="ml-2 text-sm text-gray-700">J'accepte les <a href="#" class="text-primary hover:underline">conditions d'utilisation</a> et la <a href="#" class="text-primary hover:underline">politique de confidentialité</a>.</span>
+                    </label>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="mt-6">
+                    <button type="submit" class="w-full bg-primary text-white font-bold py-3 px-4 rounded-full hover:bg-blue-700 transition duration-300">
+                        Créer mon compte
+                    </button>
+                </div>
+                
+                <!-- Login Link -->
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-gray-700">
+                        Vous avez déjà un compte ? <a href="{% url 'login' %}" class="text-primary hover:underline">Connectez-vous</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Profile picture preview
+    document.addEventListener('DOMContentLoaded', () => {
+        const profileInput = document.getElementById('profile-picture');
+        const profilePreview = document.getElementById('profile-preview');
+        
+        profileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    profilePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Password validation
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        const form = document.querySelector('form');
+        
+        form.addEventListener('submit', (e) => {
+            if (password.value !== confirmPassword.value) {
+                e.preventDefault();
+                alert('Les mots de passe ne correspondent pas.');
+            }
+            
+            // Basic password validation
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+            if (!passwordRegex.test(password.value)) {
+                e.preventDefault();
+                alert('Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule et un chiffre.');
+            }
+        });
+    });
+</script>
+{% endblock %}

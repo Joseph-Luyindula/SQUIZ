@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Déconnexion | QuizMaster{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <!-- Header -->
+        <div class="bg-primary text-white p-6">
+            <h1 class="text-2xl font-bold">Déconnexion</h1>
+        </div>
+        
+        <!-- Logout Confirmation -->
+        <div class="p-6 text-center">
+            <svg class="w-16 h-16 text-primary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            
+            <h2 class="text-xl font-bold mb-4">Êtes-vous sûr de vouloir nous quitter ?</h2>
+            <p class="text-gray-600 mb-6">Vous serez déconnecté de votre compte.</p>
+            
+            <div class="flex justify-center space-x-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-500 text-white font-bold py-2 px-6 rounded-full hover:bg-red-600 transition duration-300">
+                        OUI
+                    </button>
+                </form>
+                <a href="{% url 'index' %}" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition duration-300">
+                    NON
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

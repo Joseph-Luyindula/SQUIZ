@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz | QuizMaster{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <!-- Quiz Header -->
+    <div class="bg-primary text-white p-6">
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Quiz: Histoire</h1>
+            <div class="bg-white text-primary font-bold px-4 py-2 rounded-full">
+                <span id="current-question">1</span>/<span id="total-questions">10</span> questions
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quiz Content -->
+    <div class="p-6">
+        <!-- Timer (Optional) -->
+        <div class="mb-6">
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="timer-bar" class="bg-primary h-2.5 rounded-full" style="width: 100%"></div>
+            </div>
+        </div>
+        
+        <!-- Question -->
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-2" id="question-text">Quelle est la date de la prise de la Bastille ?</h2>
+        </div>
+        
+        <!-- Answer Options -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <button class="answer-option bg-white border-2 border-gray-200 p-4 rounded-lg text-left hover:border-primary hover:bg-blue-50 transition duration-300">
+                14 juillet 1789
+            </button>
+            <button class="answer-option bg-white border-2 border-gray-200 p-4 rounded-lg text-left hover:border-primary hover:bg-blue-50 transition duration-300">
+                4 juillet 1776
+            </button>
+            <button class="answer-option bg-white border-2 border-gray-200 p-4 rounded-lg text-left hover:border-primary hover:bg-blue-50 transition duration-300">
+                21 janvier 1793
+            </button>
+            <button class="answer-option bg-white border-2 border-gray-200 p-4 rounded-lg text-left hover:border-primary hover:bg-blue-50 transition duration-300">
+                5 mai 1789
+            </button>
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between">
+            <button id="prev-button" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition duration-300 disabled:opacity-50" disabled>
+                Précédent
+            </button>
+            <button id="next-button" class="bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition duration-300 disabled:opacity-50" disabled>
+                Suivant
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Result Modal (Hidden by default) -->
+<div id="result-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+        <h2 class="text-2xl font-bold mb-4 text-center">Résultats du Quiz</h2>
+        
+        <div class="text-center mb-6">
+            <div class="w-32 h-32 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                <span id="score-display" class="text-4xl font-bold text-primary">8/10</span>
+            </div>
+            <p class="text-lg">Félicitations ! Vous avez gagné</p>
+            <p class="text-2xl font-bold text-primary mb-2">200 XP</p>
+        </div>
+        
+        <div class="flex justify-center space-x-4">
+            <a href="{% url 'thecategory' %}" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition duration-300">
+                Retour
+            </a>
+            <a href="{% url 'quiz' %}" class="bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition duration-300">
+                Rejouer
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Quiz data (would come from backend in real app)
+        const quizData = [
+            {
+                question: "Quelle est la date de la prise de la Bastille ?",
+                options: ["14 juillet 1789", "4 juillet 1776", "21 janvier 1793", "5 mai 1789"],
+                correctAnswer: 0
+            },
+            {
+                question: "Qui était le premier président des États-Unis ?",
+                options: ["Thomas Jefferson", "Abraham Lincoln", "George Washington", "John Adams"],
+                correctAnswer: 2
+            },
+            {
+                question: "En quelle année a débuté la Première Guerre mondiale ?",
+                options: ["1939", "1918", "1914", "1905"],
+                correctAnswer: 2
+            },
+            {
+                question: "Quel empereur romain a construit un mur en Angleterre ?",
+                options: ["Jules César", "Auguste", "Hadrien", "Constantin"],
+                correctAnswer: 2
+            },
+            {
+                question: "Quelle civilisation a construit les pyramides de Gizeh ?",
+                options: ["Les Romains", "Les Grecs", "Les Mayas", "Les Égyptiens"],
+                correctAnswer: 3
+            }
+        ];
+        
+        // Quiz elements
+        const questionText = document.getElementById('question-text');
+        const answerOptions = document.querySelectorAll('.answer-option');
+        const currentQuestionEl = document.getElementById('current-question');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const timerBar = document.getElementById('timer-bar');
+        const resultModal = document.getElementById('result-modal');
+        const scoreDisplay = document.getElementById('score-display');
+        
+        // Quiz state
+        let currentQuestion = 0;
+        let score = 0;
+        const userAnswers = [];
+        let timerInterval;
+        
+        // Initialize quiz
+        function initQuiz() {
+            totalQuestionsEl.textContent = quizData.length;
+            loadQuestion();
+            startTimer();
+        }
+        
+        // Load question
+        function loadQuestion() {
+            const question = quizData[currentQuestion];
+            questionText.textContent = question.question;
+            
+            answerOptions.forEach((option, index) => {
+                option.textContent = question.options[index];
+                option.classList.remove('bg-green-100', 'bg-red-100', 'border-green-500', 'border-red-500');
+                
+                // If user has already answered this question
+                if (userAnswers[currentQuestion] !== undefined) {
+                    if (userAnswers[currentQuestion] === index) {
+                        if (index === question.correctAnswer) {
+                            option.classList.add('bg-green-100', 'border-green-500');
+                        } else {
+                            option.classList.add('bg-red-100', 'border-red-500');
+                        }
+                    } else if (index === question.correctAnswer) {
+                        option.classList.add('bg-green-100', 'border-green-500');
+                    }
+                }
+            });
+            
+            currentQuestionEl.textContent = currentQuestion + 1;
+            
+            // Update button states
+            prevButton.disabled = currentQuestion === 0;
+            nextButton.disabled = userAnswers[currentQuestion] === undefined;
+        }
+        
+        // Start timer
+        function startTimer() {
+            clearInterval(timerInterval);
+            let timeLeft = 100;
+            
+            timerInterval = setInterval(() => {
+                timeLeft -= 1;
+                timerBar.style.width = `${timeLeft}%`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    // Auto-select wrong answer if time runs out
+                    if (userAnswers[currentQuestion] === undefined) {
+                        selectAnswer(-1);
+                    }
+                }
+            }, 100);
+        }
+        
+        // Select answer
+        function selectAnswer(selectedIndex) {
+            clearInterval(timerInterval);
+            
+            const question = quizData[currentQuestion];
+            userAnswers[currentQuestion] = selectedIndex;
+            
+            // Update score
+            if (selectedIndex === question.correctAnswer) {
+                score++;
+            }
+            
+            // Show correct/incorrect answers
+            answerOptions.forEach((option, index) => {
+                if (index === selectedIndex) {
+                    if (index === question.correctAnswer) {
+                        option.classList.add('bg-green-100', 'border-green-500');
+                    } else {
+                        option.classList.add('bg-red-100', 'border-red-500');
+                    }
+                } else if (index === question.correctAnswer) {
+                    option.classList.add('bg-green-100', 'border-green-500');
+                }
+            });
+            
+            // Enable next button
+            nextButton.disabled = false;
+            
+            // If last question, show results
+            if (currentQuestion === quizData.length - 1 && userAnswers.length === quizData.length) {
+                setTimeout(showResults, 1500);
+            }
+        }
+        
+        // Show results
+        function showResults() {
+            scoreDisplay.textContent = `${score}/${quizData.length}`;
+            resultModal.classList.remove('hidden');
+        }
+        
+        // Event listeners
+        answerOptions.forEach((option, index) => {
+            option.addEventListener('click', () => {
+                if (userAnswers[currentQuestion] === undefined) {
+                    selectAnswer(index);
+                }
+            });
+        });
+        
+        prevButton.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        });
+        
+        nextButton.addEventListener('click', () => {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+                if (userAnswers[currentQuestion] === undefined) {
+                    startTimer();
+                }
+            } else {
+                showResults();
+            }
+        });
+        
+        // Initialize quiz
+        initQuiz();
+    });
+</script>
+{% endblock %}

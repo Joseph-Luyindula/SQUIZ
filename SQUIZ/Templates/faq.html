@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Aide et FAQ | QuizMaster{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <!-- Header -->
+    <div class="bg-primary text-white p-6">
+        <h1 class="text-2xl font-bold">Aide et FAQ</h1>
+        <p class="mt-2">Trouvez des réponses à vos questions</p>
+    </div>
+    
+    <!-- FAQ Content -->
+    <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Left Sidebar - Categories -->
+            <div class="md:col-span-1">
+                <div class="bg-gray-100 rounded-lg p-4">
+                    <h2 class="text-lg font-bold mb-4">Catégories</h2>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="#general" class="block p-2 rounded hover:bg-primary hover:text-white transition duration-300">Questions générales</a>
+                        </li>
+                        <li>
+                            <a href="#account" class="block p-2 rounded hover:bg-primary hover:text-white transition duration-300">Compte et profil</a>
+                        </li>
+                        <li>
+                            <a href="#quiz" class="block p-2 rounded hover:bg-primary hover:text-white transition duration-300">Quiz et jeu</a>
+                        </li>
+                        <li>
+                            <a href="#points" class="block p-2 rounded hover:bg-primary hover:text-white transition duration-300">XP et classement</a>
+                        </li>
+                        <li>
+                            <a href="#technical" class="block p-2 rounded hover:bg-primary hover:text-white transition duration-300">Problèmes techniques</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Right Content - FAQ -->
+            <div class="md:col-span-2">
+                <!-- General Questions -->
+                <div id="general" class="mb-8">
+                    <h2 class="text-xl font-bold mb-4 pb-2 border-b">Questions générales</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Qu'est-ce que QuizMaster ?</h3>
+                            <p>QuizMaster est une plateforme de quiz en ligne qui vous permet de tester vos connaissances dans différentes catégories, de gagner des XP et de monter dans les classements.</p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Est-ce que QuizMaster est gratuit ?</h3>
+                            <p>Oui, QuizMaster est entièrement gratuit. Vous pouvez jouer à autant de quiz que vous le souhaitez sans frais.</p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Comment contacter le support ?</h3>
+                            <p>Vous pouvez nous contacter à l'adresse support@quizmaster.com ou via le formulaire de contact disponible sur notre site.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Account Questions -->
+                <div id="account" class="mb-8">
+                    <h2 class="text-xl font-bold mb-4 pb-2 border-b">Compte et profil</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Comment créer un compte ?</h3>
+                            <p>Pour créer un compte, cliquez sur "S'inscrire" dans le menu principal et remplissez le formulaire d'inscription avec vos informations.</p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Comment modifier mon profil ?</h3>
+                            <p>Vous pouvez modifier votre profil en vous rendant sur la page "Profil" et en cliquant sur le bouton "Modifier" en haut à droite de la page.</p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">J'ai oublié mon mot de passe, que faire ?</h3>
+                            <p>Sur la page de connexion, cliquez sur "Mot de passe oublié" et suivez les instructions pour réinitialiser votre mot de passe.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quiz Questions -->
+                <div id="quiz" class="mb-8">
+                    <h2 class="text-xl font-bold mb-4 pb-2 border-b">Quiz et jeu</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Comment jouer à un quiz ?</h3>
+                            <p>Choisissez une catégorie qui vous intéresse, cliquez sur "Commencer" et répondez aux questions en sélectionnant la réponse que vous pensez être correcte.</p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Combien de temps ai-je pour répondre à une question ?</h3>
+                            <p>Vous avez généralement 30 secondes pour répondre à chaque question, mais cela peut varier selon le type de quiz.</p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Puis-je rejouer un quiz ?</h3>
+                            <p>Oui, vous pouvez rejouer un quiz autant de fois que vous le souhaitez, mais vous ne gagnerez des XP que la première fois.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- XP and Ranking Questions -->
+                <div id="points" class="mb-8">
+                    <h2 class="text-xl font-bold mb-4 pb-2 border-b">XP et classement</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Comment gagner des XP ?</h3>
+                            <p>Vous gagnez des XP en répondant correctement aux questions des quiz. Plus vous répondez correctement, plus vous gagnez d'XP.</p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Quelles sont les différentes catégories de joueurs ?</h3>
+                            <p>Il existe 6 catégories de joueurs : Argent (E), Or (D), Saphir (C), Rubis (B), Émeraude (A) et Diamant (S). Vous progressez dans ces catégories en gagnant des XP.</p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Comment fonctionne le classement ?</h3>
+                            <p>Le classement est basé sur le nombre total d'XP que vous avez accumulé. Plus vous avez d'XP, plus votre position dans le classement est élevée.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Technical Questions -->
+                <div id="technical">
+                    <h2 class="text-xl font-bold mb-4 pb-2 border-b">Problèmes techniques</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Le site ne se charge pas correctement, que faire ?</h3>
+                            <p>Essayez de rafraîchir la page ou de vider le cache de votre navigateur. Si le problème persiste, contactez notre support technique.</p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">Je ne peux pas me connecter, que faire ?</h3>
+                            <p>Vérifiez que vous avez entré les bonnes informations de connexion. Si vous avez oublié votre mot de passe, utilisez l'option "Mot de passe oublié".</p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h3 class="font-bold mb-2">L'application est lente, comment l'améliorer ?</h3>
+                            <p>Assurez-vous d'avoir une bonne connexion internet et essayez de fermer les autres applications ou onglets qui pourraient utiliser beaucoup de ressources.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
