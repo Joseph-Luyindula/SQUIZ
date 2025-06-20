@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+{% block title %}Inscription - SQUIZ{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="flex justify-center">
+            <div class="w-16 h-16 bg-squiz-blue rounded-full flex items-center justify-center">
+                <span class="text-white font-bold text-2xl">S</span>
+            </div>
+        </div>
+        <h2 class="mt-6 text-center text-3xl font-bold text-squiz-dark">
+            Créer votre compte SQUIZ
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+            Rejoignez la communauté et commencez à jouer !
+        </p>
+    </div>
+
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <form class="space-y-6" method="post">
+                {% csrf_token %}
+                
+                <!-- Photo de profil -->
+                <div class="text-center">
+                    <div class="relative inline-block">
+                        <img id="profile-preview" src="/placeholder.svg?height=100&width=100" 
+                             alt="Photo de profil" 
+                             class="w-24 h-24 rounded-full border-4 border-gray-200">
+                        <label for="photo" class="absolute bottom-0 right-0 bg-squiz-blue rounded-full p-2 cursor-pointer hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-camera text-white text-sm"></i>
+                        </label>
+                        <input type="file" id="photo" name="photo" accept="image/*" class="hidden">
+                    </div>
+                    <p class="mt-2 text-sm text-gray-500">Photo de profil (optionnelle)</p>
+                </div>
+
+                <!-- Username -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">
+                        Nom d'utilisateur *
+                    </label>
+                    <div class="mt-1">
+                        <input id="username" name="username" type="text" required 
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-squiz-blue focus:border-squiz-blue">
+                    </div>
+                </div>
+
+                <!-- Prénom et Nom -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700">
+                            Prénom *
+                        </label>
+                        <div class="mt-1">
+                            <input id="first_name" name="first_name" type="text" required 
+                                   class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-squiz-blue focus:border-squiz-blue">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700">
+                            Nom *
+                        </label>
+                        <div class="mt-1">
+                            <input id="last_name" name="last_name" type="text" required 
+                                   class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-squiz-blue focus:border-squiz-blue">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">
+                        Adresse email *
+                    </label>
+                    <div class="mt-1">
+                        <input id="email" name="email" type="email" required 
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-squiz-blue focus:border-squiz-blue">
+                    </div>
+                </div>
+
+                <!-- Mot de passe -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">
+                        Mot de passe *
+                    </label>
+                    <div class="mt-1 relative">
+                        <input id="password" name="password" type="password" required 
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-squiz-blue focus:border-squiz-blue pr-10">
+                        <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                            <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Confirmation mot de passe -->
+                <div>
+                    <label for="password_confirm" class="block text-sm font-medium text-gray-700">
+                        Confirmer le mot de passe *
+                    </label>
+                    <div class="mt-1 relative">
+                        <input id="password_confirm" name="password_confirm" type="password" required 
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-squiz-blue focus:border-squiz-blue pr-10">
+                        <button type="button" id="toggle-password-confirm" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                            <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Date de naissance -->
+                <div>
+                    <label for="birth_date" class="block text-sm font-medium text-gray-700">
+                        Date de naissance *
+                    </label>
+                    <div class="mt-1">
+                        <input id="birth_date" name="birth_date" type="date" required 
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-squiz-blue focus:border-squiz-blue">
+                    </div>
+                </div>
+
+                <!-- Sexe -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Sexe *
+                    </label>
+                    <div class="flex space-x-4">
+                        <label class="flex items-center">
+                            <input type="radio" name="gender" value="M" required class="text-squiz-blue focus:ring-squiz-blue">
+                            <span class="ml-2 text-sm text-gray-700">Homme</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="gender" value="F" required class="text-squiz-blue focus:ring-squiz-blue">
+                            <span class="ml-2 text-sm text-gray-700">Femme</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="gender" value="O" required class="text-squiz-blue focus:ring-squiz-blue">
+                            <span class="ml-2 text-sm text-gray-700">Autre</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pays -->
+                <div>
+                    <label for="country" class="block text-sm font-medium text-gray-700">
+                        Pays *
+                    </label>
+                    <div class="mt-1">
+                        <select id="country" name="country" required 
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-squiz-blue focus:border-squiz-blue">
+                            <option value="">Sélectionnez votre pays</option>
+                            <option value="FR">France</option>
+                            <option value="BE">Belgique</option>
+                            <option value="CH">Suisse</option>
+                            <option value="CA">Canada</option>
+                            <option value="MA">Maroc</option>
+                            <option value="TN">Tunisie</option>
+                            <option value="SN">Sénégal</option>
+                            <option value="CI">Côte d'Ivoire</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Conditions d'utilisation -->
+                <div class="flex items-center">
+                    <input id="terms" name="terms" type="checkbox" required 
+                           class="h-4 w-4 text-squiz-blue focus:ring-squiz-blue border-gray-300 rounded">
+                    <label for="terms" class="ml-2 block text-sm text-gray-700">
+                        J'accepte les <a href="#" class="text-squiz-blue hover:text-blue-600">conditions d'utilisation</a> et la <a href="#" class="text-squiz-blue hover:text-blue-600">politique de confidentialité</a>
+                    </label>
+                </div>
+
+                <!-- Submit button -->
+                <div>
+                    <button type="submit" 
+                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-squiz-blue hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-squiz-blue transition-colors">
+                        Créer mon compte
+                    </button>
+                </div>
+
+                <!-- Login link -->
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">
+                        Vous avez déjà un compte ?
+                        <a href="{% url 'login' %}" class="font-medium text-squiz-blue hover:text-blue-600">
+                            Se connecter
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Photo preview
+    document.getElementById('photo').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profile-preview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Password visibility toggle
+    function togglePasswordVisibility(inputId, buttonId) {
+        const input = document.getElementById(inputId);
+        const button = document.getElementById(buttonId);
+        const icon = button.querySelector('i');
+        
+        button.addEventListener('click', function() {
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    }
+
+    togglePasswordVisibility('password', 'toggle-password');
+    togglePasswordVisibility('password_confirm', 'toggle-password-confirm');
+
+    // Password confirmation validation
+    document.getElementById('password_confirm').addEventListener('input', function() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = this.value;
+        
+        if (password !== confirmPassword) {
+            this.setCustomValidity('Les mots de passe ne correspondent pas');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+</script>
+{% endblock %}

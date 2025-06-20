@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'quiz',
     'tailwind',
     'theme',
+    'django_browser_reload'
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'SQUIZ.urls'
@@ -120,7 +122,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-	str(BASE_DIR)+"/SQUIZ/static"
+	str(BASE_DIR)+"/SQUIZ/static",
+	str(BASE_DIR)+"/theme/static",
+	str(BASE_DIR)+"/theme/static_src",
 ]
 
 # Default primary key field type
@@ -135,3 +139,4 @@ TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+

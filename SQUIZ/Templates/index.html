@@ -1,241 +1,200 @@
 {% extends 'base.html' %}
 
-{% block title %}Accueil | QuizMaster{% endblock %}
+{% block title %}Accueil - SQUIZ{% endblock %}
 
 {% block content %}
-<div class="space-y-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Hero Section -->
-    <section class="bg-primary text-white py-16 rounded-lg shadow-lg">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6">Bienvenue sur QuizMaster</h1>
-            <p class="text-xl mb-8">Testez vos connaissances, gagnez des XP et montez dans les classements !</p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="{% url 'home' %}" class="bg-white text-primary font-bold py-3 px-6 rounded-full hover:bg-gray-100 transition duration-300">S'inscrire</a>
-                <a href="{% url 'quiz' %}" class="bg-transparent border-2 border-white text-white font-bold py-3 px-6 rounded-full hover:bg-white hover:text-primary transition duration-300">Découvrir</a>
-            </div>
-        </div>
-    </section>
+    <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-6xl font-bold text-squiz-dark mb-4">
+            Bienvenue sur <span class="text-squiz-blue">SQUIZ</span>
+        </h1>
+        <p class="text-xl text-gray-600 mb-8">Testez vos connaissances et défiez vos amis dans des quiz passionnants</p>
+        <a href="{% url 'categories' %}" class="bg-squiz-blue text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-colors">
+            Commencer à jouer
+        </a>
+    </div>
 
     <!-- Top Players Carousel -->
-    <section class="py-8">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Meilleurs Joueurs</h2>
-            <a href="#" class="flex items-center text-primary hover:underline">
-                Voir tout
-                <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
+    <div class="mb-12">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-squiz-dark flex items-center">
+                <i class="fas fa-crown text-yellow-500 mr-3"></i>
+                Meilleurs Joueurs
+            </h2>
+            <a href="{% url 'classement' %}" class="text-squiz-blue hover:text-blue-600 flex items-center">
+                Voir tout <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
         
         <div class="relative">
-            <!-- Carousel Navigation -->
-            <button class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 focus:outline-none" id="players-prev">
-                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </button>
-            
-            <div class="overflow-hidden" id="players-carousel">
-                <div class="flex transition-transform duration-500 ease-in-out" id="players-track">
-                    <!-- Player Cards (Example) -->
-                    {% for i in "12345" %}
-                    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex-shrink-0 px-2">
-                        <a href="{% url 'profile' %}" class="block">
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
-                                <div class="p-4 border-b">
-                                    <div class="flex items-center">
-                                        <div class="relative">
-                                            <div class="w-16 h-16 rounded-full overflow-hidden border-4 border-diamant">
-                                                <img src="https://via.placeholder.com/150" alt="Player" class="w-full h-full object-cover">
-                                            </div>
-                                            <span class="absolute bottom-0 right-0 bg-diamant text-white text-xs font-bold px-2 py-1 rounded-full">S</span>
-                                        </div>
-                                        <div class="ml-4">
-                                            <h3 class="font-bold">JoueurPro{{ i }}</h3>
-                                            <p class="text-sm text-gray-600">XP: 9{{ i }}50</p>
-                                            <p class="text-xs font-semibold text-diamant">Diamant #{{ i }}</p>
-                                        </div>
-                                    </div>
-                                </div>
+            <div id="players-carousel" class="flex overflow-x-auto space-x-4 pb-4">
+                <!-- Player Cards -->
+                {% for player in top_players %}
+                <div class="flex-none w-64 bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="relative inline-block mb-4">
+                            <img src="{{ player.avatar.url|default:'/placeholder.svg?height=80&width=80' }}" 
+                                 alt="{{ player.username }}" 
+                                 class="w-20 h-20 rounded-full mx-auto">
+                            <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-category-{{ player.level.color }} rounded-full flex items-center justify-center">
+                                <span class="text-white font-bold text-sm">{{ player.level.name|make_list|last }}</span>
                             </div>
-                        </a>
+                        </div>
+                        <h3 class="font-semibold text-lg text-squiz-dark">{{ player.username }}</h3>
+                        <p class="text-gray-600">{{ player.xp }} XP</p>
+                        <p class="text-sm text-gray-500">#{{ forloop.counter }} - {{ player.level.name }}</p>
                     </div>
-                    {% endfor %}
                 </div>
+                {% empty %}
+                <!-- Placeholder cards -->
+                {% for i in "123456" %}
+                <div class="flex-none w-64 bg-white rounded-lg shadow-md p-6">
+                    <div class="text-center">
+                        <div class="relative inline-block mb-4">
+                            <img src="/placeholder.svg?height=80&width=80" alt="Player" class="w-20 h-20 rounded-full mx-auto">
+                            <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-category-silver rounded-full flex items-center justify-center">
+                                <span class="text-white font-bold text-sm">E</span>
+                            </div>
+                        </div>
+                        <h3 class="font-semibold text-lg text-squiz-dark">Joueur {{ i }}</h3>
+                        <p class="text-gray-600">{{ i }}50 XP</p>
+                        <p class="text-sm text-gray-500">#{{ i }} - Argent</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endfor %}
             </div>
             
-            <button class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 focus:outline-none" id="players-next">
-                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
+            <button id="players-prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:shadow-lg">
+                <i class="fas fa-chevron-left text-squiz-blue"></i>
+            </button>
+            <button id="players-next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:shadow-lg">
+                <i class="fas fa-chevron-right text-squiz-blue"></i>
             </button>
         </div>
-    </section>
+    </div>
 
     <!-- Categories Carousel -->
-    <section class="py-8">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Catégories Populaires</h2>
-            <a href="{% url 'quiz' %}" class="flex items-center text-primary hover:underline">
-                Voir tout
-                <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
+    <div class="mb-12">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-squiz-dark flex items-center">
+                <i class="fas fa-th-large text-squiz-blue mr-3"></i>
+                Catégories Populaires
+            </h2>
+            <a href="{% url 'categories' %}" class="text-squiz-blue hover:text-blue-600 flex items-center">
+                Voir tout <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
         
         <div class="relative">
-            <!-- Carousel Navigation -->
-            <button class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 focus:outline-none" id="categories-prev">
-                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </button>
-            
-            <div class="overflow-hidden" id="categories-carousel">
-                <div class="flex transition-transform duration-500 ease-in-out" id="categories-track">
-                    <!-- Category Cards (Example) -->
-                    {% for category in "Histoire,Géographie,Sciences,Sport,Cinéma,Musique" %}
-                    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex-shrink-0 px-2">
-                        <a href="{% url 'home' %}" class="block">
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
-                                <img src="https://via.placeholder.com/300x200" alt="{{ category }}" class="w-full h-40 object-cover">
-                                <div class="p-4">
-                                    <h3 class="font-bold text-center">{{ category }}</h3>
-                                </div>
-                            </div>
-                        </a>
+            <div id="categories-carousel" class="flex overflow-x-auto space-x-4 pb-4">
+                <!-- Category Cards -->
+                {% for category in top_categories %}
+                <div class="flex-none w-64 bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
+                    <img src="{{ category.imge.url|default:'/placeholder.svg?height=160&width=256' }}" 
+                         alt="{{ category.name }}" 
+                         class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg text-squiz-dark"><a class="hover:text-blue-600 flex items-center" href="{% url 'thecategory' category.slug %}">{{ category.name }}</a></h3>
+                        <p class="text-gray-600 text-sm">{{ category.questions_count }} questions</p>
                     </div>
-                    {% endfor %}
                 </div>
+                {% empty %}
+                <!-- Placeholder cards -->
+                {% for category in "Sciences,Histoire,Sport,Géographie,Culture,Technologie" %}
+                <div class="flex-none w-64 bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="/placeholder.svg?height=160&width=256" alt="{{ category }}" class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg text-squiz-dark">{{ category }}</h3>
+                        <p class="text-gray-600 text-sm">25 questions</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endfor %}
             </div>
             
-            <button class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 focus:outline-none" id="categories-next">
-                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
+            <button id="categories-prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:shadow-lg">
+                <i class="fas fa-chevron-left text-squiz-blue"></i>
+            </button>
+            <button id="categories-next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:shadow-lg">
+                <i class="fas fa-chevron-right text-squiz-blue"></i>
             </button>
         </div>
-    </section>
+    </div>
 
     <!-- Badges Carousel -->
-    <section class="py-8">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Badges à Gagner</h2>
-            <a href="#" class="flex items-center text-primary hover:underline">
-                Voir tout
-                <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
+    <div class="mb-12">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-squiz-dark flex items-center">
+                <i class="fas fa-medal text-yellow-500 mr-3"></i>
+                Badges Récents
+            </h2>
+            <a href="{% url 'badges' %}" class="text-squiz-blue hover:text-blue-600 flex items-center">
+                Voir tout <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
         
         <div class="relative">
-            <!-- Carousel Navigation -->
-            <button class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 focus:outline-none" id="badges-prev">
-                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </button>
-            
-            <div class="overflow-hidden" id="badges-carousel">
-                <div class="flex transition-transform duration-500 ease-in-out" id="badges-track">
-                    <!-- Badge Cards (Example) -->
-                    {% for badge in "Expert,Rapide,Précis,Persévérant,Explorateur,Champion" %}
-                    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex-shrink-0 px-2">
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300 text-center p-4">
-                            <div class="w-20 h-20 mx-auto mb-3">
-                                <img src="https://via.placeholder.com/80" alt="{{ badge }}" class="w-full h-full object-contain">
-                            </div>
-                            <h3 class="font-bold">{{ badge }}</h3>
-                        </div>
-                    </div>
-                    {% endfor %}
+            <div id="badges-carousel" class="flex overflow-x-auto space-x-4 pb-4">
+                <!-- Badge Cards -->
+                {% for badge in recent_badges %}
+                <div class="flex-none w-48 bg-white rounded-lg shadow-md p-4 text-center cursor-pointer hover:shadow-lg transition-shadow">
+                    <img src="{{ badge.image.url|default:'/placeholder.svg?height=64&width=64' }}" 
+                         alt="{{ badge.name }}" 
+                         class="w-16 h-16 mx-auto mb-3">
+                    <h3 class="font-semibold text-squiz-dark">{{ badge.name }}</h3>
+                    <p class="text-gray-600 text-sm">{{ badge.description }}</p>
                 </div>
+                {% empty %}
+                <!-- Placeholder cards -->
+                {% for badge in "Débutant,Expert,Champion,Maître,Légende,Perfectionniste" %}
+                <div class="flex-none w-48 bg-white rounded-lg shadow-md p-4 text-center">
+                    <img src="/placeholder.svg?height=64&width=64" alt="{{ badge }}" class="w-16 h-16 mx-auto mb-3">
+                    <h3 class="font-semibold text-squiz-dark">{{ badge }}</h3>
+                    <p class="text-gray-600 text-sm">Badge {{ badge }}</p>
+                </div>
+                {% endfor %}
+                {% endfor %}
             </div>
             
-            <button class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 focus:outline-none" id="badges-next">
-                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
+            <button id="badges-prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:shadow-lg">
+                <i class="fas fa-chevron-left text-squiz-blue"></i>
+            </button>
+            <button id="badges-next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:shadow-lg">
+                <i class="fas fa-chevron-right text-squiz-blue"></i>
             </button>
         </div>
-    </section>
+    </div>
 </div>
-{% endblock %}
 
-{% block scripts %}
 <script>
     // Carousel functionality
-    function setupCarousel(trackId, prevId, nextId, itemWidth) {
-        const track = document.getElementById(trackId);
-        const prev = document.getElementById(prevId);
-        const next = document.getElementById(nextId);
+    function setupCarousel(carouselId, prevButtonId, nextButtonId) {
+        const carousel = document.getElementById(carouselId);
+        const prevButton = document.getElementById(prevButtonId);
+        const nextButton = document.getElementById(nextButtonId);
         
-        let position = 0;
-        const items = track.children.length;
-        
-        // Calculate how many items to show based on screen width
-        function getItemsToShow() {
-            if (window.innerWidth < 640) return 1; // Mobile
-            if (window.innerWidth < 768) return 2; // Small tablets
-            if (window.innerWidth < 1024) return 3; // Tablets
-            return 4; // Desktop
-        }
-        
-        function updatePosition() {
-            const itemsToShow = getItemsToShow();
-            const maxPosition = items - itemsToShow;
-            position = Math.max(0, Math.min(position, maxPosition));
-            
-            const translateX = position * -100 / itemsToShow;
-            track.style.transform = `translateX(${translateX}%)`;
-            
-            // Update button states
-            prev.disabled = position === 0;
-            next.disabled = position >= maxPosition;
-            
-            prev.style.opacity = position === 0 ? '0.5' : '1';
-            next.style.opacity = position >= maxPosition ? '0.5' : '1';
-        }
-        
-        next.addEventListener('click', () => {
-            position++;
-            updatePosition();
+        prevButton.addEventListener('click', () => {
+            carousel.scrollBy({ left: -300, behavior: 'smooth' });
         });
         
-        prev.addEventListener('click', () => {
-            position--;
-            updatePosition();
+        nextButton.addEventListener('click', () => {
+            carousel.scrollBy({ left: 300, behavior: 'smooth' });
         });
-        
-        // Initialize
-        updatePosition();
-        
-        // Update on resize
-        window.addEventListener('resize', updatePosition);
         
         // Auto-scroll
         setInterval(() => {
-            const itemsToShow = getItemsToShow();
-            const maxPosition = items - itemsToShow;
-            
-            if (position < maxPosition) {
-                position++;
+            if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth) {
+                carousel.scrollTo({ left: 0, behavior: 'smooth' });
             } else {
-                position = 0;
+                carousel.scrollBy({ left: 300, behavior: 'smooth' });
             }
-            
-            updatePosition();
         }, 5000);
     }
     
-    // Initialize all carousels
-    document.addEventListener('DOMContentLoaded', () => {
-        setupCarousel('players-track', 'players-prev', 'players-next');
-        setupCarousel('categories-track', 'categories-prev', 'categories-next');
-        setupCarousel('badges-track', 'badges-prev', 'badges-next');
-    });
+    setupCarousel('players-carousel', 'players-prev', 'players-next');
+    setupCarousel('categories-carousel', 'categories-prev', 'categories-next');
+    setupCarousel('badges-carousel', 'badges-prev', 'badges-next');
 </script>
 {% endblock %}

@@ -1,194 +1,177 @@
 {% extends 'base.html' %}
 
-{% block title %}Profil | QuizMaster{% endblock %}
+{% block title %}Profil - SQUIZ{% endblock %}
 
 {% block content %}
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
-    <!-- Profile Header -->
-    <div class="bg-primary text-white p-6">
-        <h1 class="text-2xl font-bold">Profile Utilisateur</h1>
-    </div>
-    
-    <!-- Identity Section -->
-    <div class="p-6">
-        <div class="flex flex-col md:flex-row gap-8">
-            <!-- Left Column - Profile Picture & Basic Info -->
-            <div class="md:w-1/3">
-                <div class="flex flex-col items-center">
-                    <!-- Profile Picture with Category Circle -->
-                    <div class="relative mb-4">
-                        <div class="w-40 h-40 rounded-full overflow-hidden border-4 border-diamant">
-                            <img src="https://via.placeholder.com/300" alt="Profile Picture" class="w-full h-full object-cover">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Profile Info -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="text-center">
+                    <!-- Profile Picture with Category Ring -->
+                    <div class="relative inline-block mb-4">
+                        <img src="{{ user.profile.avatar.url|default:'/placeholder.svg?height=120&width=120' }}" 
+                             alt="{{ user.username }}" 
+                             class="w-30 h-30 rounded-full border-4 border-category-{{ user.profile.level.color }}">
+                        <div class="absolute -bottom-2 -right-2 w-12 h-12 bg-category-{{ user.profile.level.color }} rounded-full flex items-center justify-center border-4 border-white">
+                            <span class="text-white font-bold text-lg">{{ user.profile.level.name|make_list|last }}</span>
                         </div>
-                        <div class="absolute bottom-0 right-0 bg-diamant text-white font-bold px-3 py-1 rounded-full">S</div>
                     </div>
                     
-                    <!-- Username -->
-                    <h2 class="text-2xl font-bold mb-2">JoueurPro1</h2>
+                    <h1 class="text-2xl font-bold text-squiz-dark mb-2">{{ user.username }}</h1>
+                    <p class="text-gray-600 mb-1">Position: #{{ user.profile.rank }}</p>
+                    <p class="text-gray-600 mb-1">Catégorie: {{ user.profile.level.name }}</p>
+                    <p class="text-gray-600 mb-4">
+                        <i class="fas fa-flag mr-1"></i>{{ user.profile.country }}
+                    </p>
                     
-                    <!-- Rank & Category -->
-                    <div class="flex items-center mb-2">
-                        <span class="bg-diamant text-white text-sm font-bold px-3 py-1 rounded-full mr-2">#1</span>
-                        <span class="text-diamant font-semibold">Diamant</span>
-                    </div>
-                    
-                    <!-- Country -->
-                    <div class="flex items-center mb-4">
-                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
-                        </svg>
-                        <span>France</span>
-                    </div>
-                    
-                    <!-- XP -->
-                    <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
-                        <div class="bg-diamant h-4 rounded-full" style="width: 85%"></div>
-                    </div>
-                    <p class="text-sm font-semibold mb-6">9850 XP</p>
-                </div>
-            </div>
-            
-            <!-- Right Column - Badges & Graph -->
-            <div class="md:w-2/3">
-                <!-- Badges Carousel -->
-                <div class="mb-8">
-                    <h3 class="text-xl font-bold mb-4">Badges Obtenus</h3>
-                    
-                    <div class="relative">
-                        <!-- Carousel Navigation -->
-                        <button class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 focus:outline-none" id="profile-badges-prev">
-                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                            </svg>
-                        </button>
-                        
-                        <div class="overflow-hidden px-8" id="profile-badges-carousel">
-                            <div class="flex transition-transform duration-500 ease-in-out" id="profile-badges-track">
-                                <!-- Badge Items (Example) -->
-                                {% for badge in "Expert,Rapide,Précis,Persévérant,Explorateur,Champion" %}
-                                <div class="w-1/3 flex-shrink-0 px-2">
-                                    <div class="bg-gray-100 rounded-lg p-3 text-center hover:bg-gray-200 transition duration-300">
-                                        <div class="w-16 h-16 mx-auto mb-2">
-                                            <img src="https://via.placeholder.com/80" alt="{{ badge }}" class="w-full h-full object-contain">
-                                        </div>
-                                        <p class="text-sm font-medium">{{ badge }}</p>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        
-                        <button class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 focus:outline-none" id="profile-badges-next">
-                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
+                    <div class="bg-squiz-blue text-white rounded-lg p-4 mb-6">
+                        <div class="text-3xl font-bold">{{ user.profile.xp }}</div>
+                        <div class="text-sm">Points XP</div>
                     </div>
                 </div>
                 
-                <!-- Performance Graph -->
-                <div>
-                    <h3 class="text-xl font-bold mb-4">Progression</h3>
-                    <div class="bg-gray-100 p-4 rounded-lg h-64">
-                        <canvas id="performanceChart"></canvas>
+                <!-- Badges Carousel -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-squiz-dark mb-4 flex items-center">
+                        <i class="fas fa-medal text-yellow-500 mr-2"></i>
+                        Mes Badges
+                    </h3>
+                    <div class="relative">
+                        <div id="user-badges-carousel" class="flex overflow-x-auto space-x-3 pb-2">
+                            {% for badge in user.profile.badges.all %}
+                            <div class="flex-none w-20 text-center cursor-pointer hover:scale-105 transition-transform">
+                                <img src="{{ badge.image.url|default:'/placeholder.svg?height=48&width=48' }}" 
+                                     alt="{{ badge.name }}" 
+                                     class="w-12 h-12 mx-auto mb-1">
+                                <p class="text-xs text-gray-600">{{ badge.name }}</p>
+                            </div>
+                            {% empty %}
+                            <p class="text-gray-500 text-center w-full">Aucun badge pour le moment</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-squiz-dark mb-6 flex items-center">
+                    <i class="fas fa-chart-bar text-squiz-blue mr-3"></i>
+                    Statistiques
+                </h2>
+                
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-squiz-blue">{{ user.profile.total_games }}</div>
+                        <div class="text-sm text-gray-600">Parties jouées</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-green-600">{{ user.profile.wins }}</div>
+                        <div class="text-sm text-gray-600">Victoires</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-yellow-600">{{ user.profile.win_rate }}%</div>
+                        <div class="text-sm text-gray-600">Taux de réussite</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-600">{{ user.profile.streak }}</div>
+                        <div class="text-sm text-gray-600">Série actuelle</div>
+                    </div>
+                </div>
+                
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Performance Chart -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-squiz-dark mb-4">Performance par catégorie</h3>
+                        <canvas id="categoryChart" width="400" height="300"></canvas>
+                    </div>
+                    
+                    <!-- Progress Chart -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-squiz-dark mb-4">Progression XP (7 derniers jours)</h3>
+                        <canvas id="progressChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="mt-8">
+                    <h3 class="text-lg font-semibold text-squiz-dark mb-4">Activité récente</h3>
+                    <div class="space-y-3">
+                        {% for activity in recent_activities %}
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <div class="w-10 h-10 bg-squiz-blue rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-{{ activity.icon }} text-white"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-squiz-dark">{{ activity.description }}</p>
+                                <p class="text-sm text-gray-500">{{ activity.date|timesince }} ago</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-gray-500 text-center py-4">Aucune activité récente</p>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Badges Carousel
-    document.addEventListener('DOMContentLoaded', () => {
-        const track = document.getElementById('profile-badges-track');
-        const prev = document.getElementById('profile-badges-prev');
-        const next = document.getElementById('profile-badges-next');
-        
-        let position = 0;
-        const items = track.children.length;
-        
-        // Calculate how many items to show based on screen width
-        function getItemsToShow() {
-            if (window.innerWidth < 640) return 1; // Mobile
-            if (window.innerWidth < 768) return 2; // Small tablets
-            return 3; // Tablets and Desktop
-        }
-        
-        function updatePosition() {
-            const itemsToShow = getItemsToShow();
-            const maxPosition = items - itemsToShow;
-            position = Math.max(0, Math.min(position, maxPosition));
-            
-            const translateX = position * -100 / itemsToShow;
-            track.style.transform = `translateX(${translateX}%)`;
-            
-            // Update button states
-            prev.disabled = position === 0;
-            next.disabled = position >= maxPosition;
-            
-            prev.style.opacity = position === 0 ? '0.5' : '1';
-            next.style.opacity = position >= maxPosition ? '0.5' : '1';
-        }
-        
-        next.addEventListener('click', () => {
-            position++;
-            updatePosition();
-        });
-        
-        prev.addEventListener('click', () => {
-            position--;
-            updatePosition();
-        });
-        
-        // Initialize
-        updatePosition();
-        
-        // Update on resize
-        window.addEventListener('resize', updatePosition);
-    });
-    
-    // Performance Chart
-    document.addEventListener('DOMContentLoaded', () => {
-        const ctx = document.getElementById('performanceChart').getContext('2d');
-        
-        const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil'],
-                datasets: [{
-                    label: 'XP Gagnés',
-                    data: [650, 1200, 1850, 3200, 4500, 7200, 9850],
-                    backgroundColor: 'rgba(0, 102, 204, 0.1)',
-                    borderColor: '#0066cc',
-                    borderWidth: 2,
-                    tension: 0.3,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'XP'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Mois'
-                        }
-                    }
+    // Category Performance Chart
+    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(categoryCtx, {
+        type: 'radar',
+        data: {
+            labels: ['Sciences', 'Histoire', 'Sport', 'Géographie', 'Culture', 'Technologie'],
+            datasets: [{
+                label: 'Performance (%)',
+                data: [85, 70, 90, 65, 80, 75],
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100
                 }
             }
-        });
+        }
+    });
+
+    // Progress Chart
+    const progressCtx = document.getElementById('progressChart').getContext('2d');
+    new Chart(progressCtx, {
+        type: 'line',
+        data: {
+            labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+            datasets: [{
+                label: 'XP gagnés',
+                data: [120, 150, 80, 200, 180, 90, 160],
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
     });
 </script>
 {% endblock %}

@@ -1,261 +1,265 @@
 {% extends 'base.html' %}
 
-{% block title %}Quiz | QuizMaster{% endblock %}
+{% block title %}Quiz - SQUIZ{% endblock %}
 
 {% block content %}
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
-    <!-- Quiz Header -->
-    <div class="bg-primary text-white p-6">
-        <div class="flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Quiz: Histoire</h1>
-            <div class="bg-white text-primary font-bold px-4 py-2 rounded-full">
-                <span id="current-question">1</span>/<span id="total-questions">10</span> questions
-            </div>
-        </div>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Quiz Header -->
+  <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-2xl font-bold text-squiz-dark">{{ category|default:"non catégorisé" }}</h1>
+      <div class="text-lg font-semibold text-squiz-blue">
+        <span id="current-question">1</span>/<span id="total-questions"></span> questions
+      </div>
     </div>
-    
-    <!-- Quiz Content -->
-    <div class="p-6">
-        <!-- Timer (Optional) -->
+
+    <!-- Progress Bar -->
+    <div class="w-full bg-gray-200 rounded-full h-2">
+      <div id="progress-bar" class="bg-squiz-blue h-2 rounded-full transition-all duration-300" style="width: 10%"></div>
+    </div>
+  </div>
+
+  <!-- Question Card -->
+  <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+    <div class="text-center mb-8">
+      <h2 id="question-text" class="text-xl md:text-2xl font-semibold text-squiz-dark mb-4">
+      </h2>
+
+      <!-- Question Image (if any) -->
+      <div id="question-image" class="mb-6 hidden">
+        <img src="/placeholder.svg?height=300&width=500" alt="Question" class="mx-auto rounded-lg max-w-full h-auto">
+      </div>
+    </div>
+
+    <!-- Answer Options -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="answers-grid">
+      <button class="answer-option p-4 border-2 border-gray-200 rounded-lg hover:border-squiz-blue hover:bg-blue-50 transition-all text-left" data-answer="A">
+        <span class="font-semibold text-squiz-blue mr-2">A.</span>
+        <span></span>
+      </button>
+      <button class="answer-option p-4 border-2 border-gray-200 rounded-lg hover:border-squiz-blue hover:bg-blue-50 transition-all text-left" data-answer="B">
+        <span class="font-semibold text-squiz-blue mr-2">B.</span>
+        <span></span>
+      </button>
+      <button class="answer-option p-4 border-2 border-gray-200 rounded-lg hover:border-squiz-blue hover:bg-blue-50 transition-all text-left" data-answer="C">
+        <span class="font-semibold text-squiz-blue mr-2">C.</span>
+        <span></span>
+      </button>
+      <button class="answer-option p-4 border-2 border-gray-200 rounded-lg hover:border-squiz-blue hover:bg-blue-50 transition-all text-left" data-answer="D">
+        <span class="font-semibold text-squiz-blue mr-2">D.</span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Timer and Actions -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <i class="fas fa-clock text-squiz-blue mr-2"></i>
+        <span class="text-lg font-semibold text-squiz-dark">Temps restant: </span>
+        <span id="timer" class="text-lg font-bold text-red-600 ml-2"></span>
+      </div>
+
+      <div class="flex space-x-4">
+        <button id="skip-btn" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+          Passer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Results Modal (Hidden by default) -->
+  <div id="results-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-trophy text-green-600 text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-squiz-dark mb-4">Quiz terminé !</h2>
         <div class="mb-6">
-            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                <div id="timer-bar" class="bg-primary h-2.5 rounded-full" style="width: 100%"></div>
+          <div class="text-4xl font-bold text-squiz-blue mb-2" id="final-score">
+          </div>
+          <div class="text-gray-600">
+            Score final
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="text-center">
+            <div class="text-xl font-bold text-green-600" id="correct-answers">
             </div>
+            <div class="text-sm text-gray-600">
+              Correctes
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="text-xl font-bold text-red-600" id="wrong-answers">
+            </div>
+            <div class="text-sm text-gray-600">
+              Incorrectes
+            </div>
+          </div>
         </div>
-        
-        <!-- Question -->
-        <div class="mb-8">
-            <h2 class="text-xl font-bold mb-2" id="question-text">Quelle est la date de la prise de la Bastille ?</h2>
+        <div class="flex space-x-4">
+          <button id="retry-btn" class="flex-1 bg-squiz-blue text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+            Rejouer
+          </button>
+          <button id="home-btn" class="flex-1 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors">
+            Accueil
+          </button>
         </div>
-        
-        <!-- Answer Options -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <button class="answer-option bg-white border-2 border-gray-200 p-4 rounded-lg text-left hover:border-primary hover:bg-blue-50 transition duration-300">
-                14 juillet 1789
-            </button>
-            <button class="answer-option bg-white border-2 border-gray-200 p-4 rounded-lg text-left hover:border-primary hover:bg-blue-50 transition duration-300">
-                4 juillet 1776
-            </button>
-            <button class="answer-option bg-white border-2 border-gray-200 p-4 rounded-lg text-left hover:border-primary hover:bg-blue-50 transition duration-300">
-                21 janvier 1793
-            </button>
-            <button class="answer-option bg-white border-2 border-gray-200 p-4 rounded-lg text-left hover:border-primary hover:bg-blue-50 transition duration-300">
-                5 mai 1789
-            </button>
-        </div>
-        
-        <!-- Navigation Buttons -->
-        <div class="flex justify-between">
-            <button id="prev-button" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition duration-300 disabled:opacity-50" disabled>
-                Précédent
-            </button>
-            <button id="next-button" class="bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition duration-300 disabled:opacity-50" disabled>
-                Suivant
-            </button>
-        </div>
+      </div>
     </div>
+  </div>
 </div>
 
-<!-- Result Modal (Hidden by default) -->
-<div id="result-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
-        <h2 class="text-2xl font-bold mb-4 text-center">Résultats du Quiz</h2>
-        
-        <div class="text-center mb-6">
-            <div class="w-32 h-32 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <span id="score-display" class="text-4xl font-bold text-primary">8/10</span>
-            </div>
-            <p class="text-lg">Félicitations ! Vous avez gagné</p>
-            <p class="text-2xl font-bold text-primary mb-2">200 XP</p>
-        </div>
-        
-        <div class="flex justify-center space-x-4">
-            <a href="{% url 'thecategory' %}" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition duration-300">
-                Retour
-            </a>
-            <a href="{% url 'quiz' %}" class="bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition duration-300">
-                Rejouer
-            </a>
-        </div>
-    </div>
-</div>
-{% endblock %}
-
-{% block scripts %}
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Quiz data (would come from backend in real app)
-        const quizData = [
-            {
-                question: "Quelle est la date de la prise de la Bastille ?",
-                options: ["14 juillet 1789", "4 juillet 1776", "21 janvier 1793", "5 mai 1789"],
-                correctAnswer: 0
-            },
-            {
-                question: "Qui était le premier président des États-Unis ?",
-                options: ["Thomas Jefferson", "Abraham Lincoln", "George Washington", "John Adams"],
-                correctAnswer: 2
-            },
-            {
-                question: "En quelle année a débuté la Première Guerre mondiale ?",
-                options: ["1939", "1918", "1914", "1905"],
-                correctAnswer: 2
-            },
-            {
-                question: "Quel empereur romain a construit un mur en Angleterre ?",
-                options: ["Jules César", "Auguste", "Hadrien", "Constantin"],
-                correctAnswer: 2
-            },
-            {
-                question: "Quelle civilisation a construit les pyramides de Gizeh ?",
-                options: ["Les Romains", "Les Grecs", "Les Mayas", "Les Égyptiens"],
-                correctAnswer: 3
-            }
-        ];
-        
-        // Quiz elements
-        const questionText = document.getElementById('question-text');
-        const answerOptions = document.querySelectorAll('.answer-option');
-        const currentQuestionEl = document.getElementById('current-question');
-        const totalQuestionsEl = document.getElementById('total-questions');
-        const prevButton = document.getElementById('prev-button');
-        const nextButton = document.getElementById('next-button');
-        const timerBar = document.getElementById('timer-bar');
-        const resultModal = document.getElementById('result-modal');
-        const scoreDisplay = document.getElementById('score-display');
-        
-        // Quiz state
-        let currentQuestion = 0;
-        let score = 0;
-        const userAnswers = [];
-        let timerInterval;
-        
-        // Initialize quiz
-        function initQuiz() {
-            totalQuestionsEl.textContent = quizData.length;
-            loadQuestion();
-            startTimer();
-        }
-        
-        // Load question
-        function loadQuestion() {
-            const question = quizData[currentQuestion];
-            questionText.textContent = question.question;
-            
-            answerOptions.forEach((option, index) => {
-                option.textContent = question.options[index];
-                option.classList.remove('bg-green-100', 'bg-red-100', 'border-green-500', 'border-red-500');
-                
-                // If user has already answered this question
-                if (userAnswers[currentQuestion] !== undefined) {
-                    if (userAnswers[currentQuestion] === index) {
-                        if (index === question.correctAnswer) {
-                            option.classList.add('bg-green-100', 'border-green-500');
-                        } else {
-                            option.classList.add('bg-red-100', 'border-red-500');
-                        }
-                    } else if (index === question.correctAnswer) {
-                        option.classList.add('bg-green-100', 'border-green-500');
-                    }
-                }
-            });
-            
-            currentQuestionEl.textContent = currentQuestion + 1;
-            
-            // Update button states
-            prevButton.disabled = currentQuestion === 0;
-            nextButton.disabled = userAnswers[currentQuestion] === undefined;
-        }
-        
-        // Start timer
-        function startTimer() {
-            clearInterval(timerInterval);
-            let timeLeft = 100;
-            
-            timerInterval = setInterval(() => {
-                timeLeft -= 1;
-                timerBar.style.width = `${timeLeft}%`;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    // Auto-select wrong answer if time runs out
-                    if (userAnswers[currentQuestion] === undefined) {
-                        selectAnswer(-1);
-                    }
-                }
-            }, 100);
-        }
-        
-        // Select answer
-        function selectAnswer(selectedIndex) {
-            clearInterval(timerInterval);
-            
-            const question = quizData[currentQuestion];
-            userAnswers[currentQuestion] = selectedIndex;
-            
-            // Update score
-            if (selectedIndex === question.correctAnswer) {
-                score++;
-            }
-            
-            // Show correct/incorrect answers
-            answerOptions.forEach((option, index) => {
-                if (index === selectedIndex) {
-                    if (index === question.correctAnswer) {
-                        option.classList.add('bg-green-100', 'border-green-500');
-                    } else {
-                        option.classList.add('bg-red-100', 'border-red-500');
-                    }
-                } else if (index === question.correctAnswer) {
-                    option.classList.add('bg-green-100', 'border-green-500');
-                }
-            });
-            
-            // Enable next button
-            nextButton.disabled = false;
-            
-            // If last question, show results
-            if (currentQuestion === quizData.length - 1 && userAnswers.length === quizData.length) {
-                setTimeout(showResults, 1500);
-            }
-        }
-        
-        // Show results
-        function showResults() {
-            scoreDisplay.textContent = `${score}/${quizData.length}`;
-            resultModal.classList.remove('hidden');
-        }
-        
-        // Event listeners
-        answerOptions.forEach((option, index) => {
-            option.addEventListener('click', () => {
-                if (userAnswers[currentQuestion] === undefined) {
-                    selectAnswer(index);
-                }
-            });
-        });
-        
-        prevButton.addEventListener('click', () => {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                loadQuestion();
-            }
-        });
-        
-        nextButton.addEventListener('click', () => {
-            if (currentQuestion < quizData.length - 1) {
-                currentQuestion++;
-                loadQuestion();
-                if (userAnswers[currentQuestion] === undefined) {
-                    startTimer();
-                }
-            } else {
-                showResults();
-            }
-        });
-        
-        // Initialize quiz
-        initQuiz();
+  const questions = {{ quiz_data|safe }};
+
+  let currentQuestion = 1;
+  const totalQuestions = questions.length;
+  let timegame = 10
+  let timeLeft = 10;
+  let timer;
+  let selectedAnswer = null;
+  let score = 0;
+  let shuffledAnswers = [];
+
+  const AUTO_NEXT_DELAY = 2000; // délai avant passage automatique à la question suivante
+  
+  document.getElementById("total-questions").textContent = totalQuestions
+
+  function shuffleArray(array) {
+    return array
+    .map(value => ({
+      value, sort: Math.random()
+    }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({
+      value
+    }) => value);
+  }
+
+  function startTimer() {
+    timer = setInterval(() => {
+      timeLeft--;
+      document.getElementById('timer').textContent = timeLeft + 's';
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        revealCorrectAnswer();
+        setTimeout(nextQuestion, AUTO_NEXT_DELAY);
+      }
+    },
+      1000);
+  }
+
+  function updateProgress() {
+    const progress = (currentQuestion / totalQuestions) * 100;
+    document.getElementById('progress-bar').style.width = progress + '%';
+    document.getElementById('current-question').textContent = currentQuestion;
+  }
+
+  function selectAnswer(answerIndex) {
+    clearInterval(timer);
+
+    selectedAnswer = shuffledAnswers[answerIndex];
+    const correctAnswer = questions[currentQuestion - 1].correct;
+
+    const answerButtons = document.querySelectorAll('.answer-option');
+
+    answerButtons.forEach((btn, index) => {
+      const answerText = shuffledAnswers[index];
+      btn.classList.remove('border-squiz-blue', 'bg-blue-50', 'border-gray-200');
+
+      if (answerText === correctAnswer) {
+        btn.classList.add('border-green-500', 'bg-green-100');
+      } else if (answerText === selectedAnswer) {
+        btn.classList.add('border-red-500', 'bg-red-100');
+      }
     });
+
+    if (selectedAnswer === correctAnswer) {
+      score++;
+    }
+
+    setTimeout(nextQuestion, AUTO_NEXT_DELAY);
+  }
+
+  function revealCorrectAnswer() {
+    const correctAnswer = questions[currentQuestion - 1].correct;
+    const answerButtons = document.querySelectorAll('.answer-option');
+
+    answerButtons.forEach((btn, index) => {
+      const answerText = shuffledAnswers[index];
+      btn.classList.remove('border-squiz-blue', 'bg-blue-50', 'border-gray-200');
+
+      if (answerText === correctAnswer) {
+        btn.classList.add('border-green-500', 'bg-green-100');
+      }
+    });
+  }
+
+  function nextQuestion() {
+    currentQuestion++;
+
+    if (currentQuestion > totalQuestions) {
+      showResults();
+    } else {
+      selectedAnswer = null;
+      timeLeft = timegame;
+
+      updateProgress();
+      loadQuestion();
+      startTimer();
+    }
+  }
+
+  function loadQuestion() {
+    const questionData = questions[currentQuestion - 1];
+    if (questionData) {
+      document.getElementById('question-text').textContent = questionData.question;
+
+      shuffledAnswers = shuffleArray([...questionData.answers]);
+
+      const answerButtons = document.querySelectorAll('.answer-option');
+      answerButtons.forEach((btn, index) => {
+        btn.querySelector('span:last-child').textContent = shuffledAnswers[index];
+        btn.className = 'answer-option border border-gray-200 p-2 rounded-md flex items-center gap-2 cursor-pointer';
+      });
+    }
+  }
+
+  function showResults() {
+    document.getElementById('final-score').textContent = score + '/' + totalQuestions;
+    document.getElementById('correct-answers').textContent = score;
+    document.getElementById('wrong-answers').textContent = totalQuestions - score;
+    document.getElementById('results-modal').classList.remove('hidden');
+    document.getElementById('results-modal').classList.add('flex');
+  }
+
+  // Événements
+  document.querySelectorAll('.answer-option').forEach((btn, index) => {
+    btn.addEventListener('click', () => selectAnswer(index));
+  });
+
+  document.getElementById('skip-btn').addEventListener('click', () => {
+    clearInterval(timer);
+    revealCorrectAnswer();
+    setTimeout(nextQuestion, AUTO_NEXT_DELAY);
+  });
+
+  document.getElementById('retry-btn').addEventListener('click', () => {
+    location.reload();
+  });
+
+  document.getElementById('home-btn').addEventListener('click', () => {
+    window.location.href = '/';
+  });
+
+  // Initialisation
+  updateProgress();
+  loadQuestion();
+  startTimer();
 </script>
 {% endblock %}

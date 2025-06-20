@@ -9,6 +9,7 @@ from django.utils import timezone
 class Category(models.Model):
 	name = models.CharField(max_length=50)
 	description = models.TextField()
+	total_game = models.IntegerField(default=0)
 	slug = models.SlugField()
 	image = models.ImageField(null=True,blank=True,upload_to="image_category")
 	def __str__(self):
@@ -38,7 +39,7 @@ class Questionnaire(models.Model):
 class Level(models.Model):
 	name = models.CharField(max_length=10)
 	pseudo = models.CharField(max_length=50)
-	color = models.CharField(max_length=8)
+	color = models.CharField(max_length=10)
 	max = models.IntegerField()
 	description = models.TextField(blank=True,null=True)
 	
@@ -49,6 +50,10 @@ class Level(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,primary_key=True)
     level = models.ForeignKey(Level, models.RESTRICT, blank=True,null=True)
+    xp = models.IntegerField(default=0)
+    total_games = models.IntegerField(default=0)
+    wins = models.IntegerField(default=0)
+    win_rate = models.IntegerField(default=0)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True,null=True)
     friends = models.ManyToManyField('self', blank=True, symmetrical=True)
     data = models.JSONField(default=dict)

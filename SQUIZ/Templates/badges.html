@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}Badges - SQUIZ{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-squiz-dark mb-4">Collection de Badges</h1>
+        <p class="text-xl text-gray-600">Débloquez des badges en accomplissant des défis et en progressant dans vos quiz</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="mb-8">
+        <div class="max-w-md mx-auto">
+            <div class="relative">
+                <input type="text" 
+                       id="badge-search" 
+                       placeholder="Rechercher un badge..." 
+                       class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-squiz-blue focus:border-transparent">
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Badge Categories Filter -->
+    <div class="mb-8">
+        <div class="flex flex-wrap justify-center gap-2">
+            <button class="badge-filter active px-4 py-2 rounded-full bg-squiz-blue text-white" data-category="all">
+                Tous
+            </button>
+            <button class="badge-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-category="achievement">
+                Accomplissements
+            </button>
+            <button class="badge-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-category="category">
+                Catégories
+            </button>
+            <button class="badge-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-category="streak">
+                Séries
+            </button>
+            <button class="badge-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-category="special">
+                Spéciaux
+            </button>
+        </div>
+    </div>
+
+    <!-- Badges Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="badges-grid">
+        {% for badge in badges %}
+        <div class="badge-card bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow" 
+             data-category="{{ badge.category }}" 
+             data-name="{{ badge.name|lower }}">
+            <div class="relative mb-4">
+                <img src="{{ badge.image.url|default:'/placeholder.svg?height=80&width=80' }}" 
+                     alt="{{ badge.name }}" 
+                     class="w-20 h-20 mx-auto {% if not badge.earned %}grayscale opacity-50{% endif %}">
+                {% if badge.earned %}
+                <div class="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-check text-white text-xs"></i>
+                </div>
+                {% else %}
+                <div class="absolute -top-2 -right-2 w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
+                    <i class="fas fa-lock text-white text-xs"></i>
+                </div>
+                {% endif %}
+            </div>
+            
+            <h3 class="font-semibold text-lg text-squiz-dark mb-2">{{ badge.name }}</h3>
+            <p class="text-gray-600 text-sm mb-3">{{ badge.description }}</p>
+            
+            {% if badge.earned %}
+            <div class="text-green-600 font-semibold text-sm">
+                <i class="fas fa-trophy mr-1"></i>
+                Obtenu le {{ badge.earned_date|date:"d/m/Y" }}
+            </div>
+            {% else %}
+            <div class="text-gray-500 text-sm">
+                <i class="fas fa-target mr-1"></i>
+                {{ badge.progress }}% complété
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div class="bg-squiz-blue h-2 rounded-full" style="width: {{ badge.progress }}%"></div>
+            </div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <!-- Placeholder badges -->
+        {% for badge_data in '["Débutant","achievement"]' %}
+        {% with badge_info=badge_data|cut:"," %}
+        <div class="badge-card bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow" 
+             data-category="{{ badge_info.1 }}" 
+             data-name="{{ badge_info.0|lower }}">
+            <div class="relative mb-4">
+                <img src="/placeholder.svg?height=80&width=80" 
+                     alt="{{ badge_info.0 }}" 
+                     class="w-20 h-20 mx-auto {% if badge_info.3|add:0 < 100 %}grayscale opacity-50{% endif %}">
+                {% if badge_info.3|add:0 == 100 %}
+                <div class="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-check text-white text-xs"></i>
+                </div>
+                {% else %}
+                <div class="absolute -top-2 -right-2 w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
+                    <i class="fas fa-lock text-white text-xs"></i>
+                </div>
+                {% endif %}
+            </div>
+            
+            <h3 class="font-semibold text-lg text-squiz-dark mb-2">{{ badge_info.0 }}</h3>
+            <p class="text-gray-600 text-sm mb-3">{{ badge_info.2 }}</p>
+            
+            {% if badge_info.3|add:0 == 100 %}
+            <div class="text-green-600 font-semibold text-sm">
+                <i class="fas fa-trophy mr-1"></i>
+                Badge obtenu
+            </div>
+            {% else %}
+            <div class="text-gray-500 text-sm">
+                <i class="fas fa-target mr-1"></i>
+                {{ badge_info.3 }}% complété
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div class="bg-squiz-blue h-2 rounded-full" style="width: {{ badge_info.3 }}%"></div>
+            </div>
+            {% endif %}
+        </div>
+        {% endwith %}
+        {% endfor %}
+        {% endfor %}
+    </div>
+
+    <!-- No Results Message -->
+    <div id="no-results" class="text-center py-12 hidden">
+        <i class="fas fa-search text-gray-400 text-4xl mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun badge trouvé</h3>
+        <p class="text-gray-500">Essayez de modifier vos critères de recherche</p>
+    </div>
+</div>
+
+<script>
+    // Badge filtering and search functionality
+    const searchInput = document.getElementById('badge-search');
+    const filterButtons = document.querySelectorAll('.badge-filter');
+    const badgeCards = document.querySelectorAll('.badge-card');
+    const noResults = document.getElementById('no-results');
+
+    let currentFilter = 'all';
+
+    function filterBadges() {
+        const searchTerm = searchInput.value.toLowerCase();
+        let visibleCount = 0;
+
+        badgeCards.forEach(card => {
+            const category = card.dataset.category;
+            const name = card.dataset.name;
+            
+            const matchesFilter = currentFilter === 'all' || category === currentFilter;
+            const matchesSearch = name.includes(searchTerm);
+            
+            if (matchesFilter && matchesSearch) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Show/hide no results message
+        if (visibleCount === 0) {
+            noResults.classList.remove('hidden');
+        } else {
+            noResults.classList.add('hidden');
+        }
+    }
+
+    // Search input event listener
+    searchInput.addEventListener('input', filterBadges);
+
+    // Filter button event listeners
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Update active filter
+            filterButtons.forEach(btn => {
+                btn.classList.remove('active', 'bg-squiz-blue', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            button.classList.add('active', 'bg-squiz-blue', 'text-white');
+            button.classList.remove('bg-gray-200', 'text-gray-700');
+            
+            currentFilter = button.dataset.category;
+            filterBadges();
+        });
+    });
+</script>
+{% endblock %}

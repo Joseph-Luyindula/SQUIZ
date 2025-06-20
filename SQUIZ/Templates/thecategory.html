@@ -1,70 +1,172 @@
 {% extends 'base.html' %}
 
-{% block title %}Catégorie | QuizMaster{% endblock %}
+{% block title %}{{ category.name }} - SQUIZ{% endblock %}
 
 {% block content %}
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
-    <!-- Category Header with Image -->
-    <div class="relative h-64">
-        <img src="https://via.placeholder.com/1200x400" alt="Category Banner" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-        <div class="absolute bottom-0 left-0 p-6 text-white">
-            <h1 class="text-3xl font-bold mb-2">Histoire</h1>
-        </div>
-    </div>
-    
-    <!-- Category Content -->
-    <div class="p-6">
-        <!-- Description -->
-        <div class="mb-8">
-            <h2 class="text-xl font-bold mb-4">Description</h2>
-            <p class="text-gray-700">
-                Testez vos connaissances en histoire à travers différentes époques et civilisations. 
-                Des pharaons de l'Égypte ancienne aux événements contemporains, ce quiz couvre une 
-                large gamme de sujets historiques fascinants. Êtes-vous prêt à voyager dans le temps ?
-            </p>
-        </div>
-        
-        <!-- Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-gray-100 p-4 rounded-lg text-center">
-                <p class="text-sm text-gray-600">Difficulté</p>
-                <div class="flex justify-center mt-2">
-                    <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                    <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                    <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                    <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                    <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Category Header -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="relative">
+            <img src="{{ category.imge.url|default:'/placeholder.svg?height=300&width=1200' }}" 
+                 alt="{{ category.name }}" 
+                 class="w-full h-64 object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                <div class="text-center text-white">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">{{ category.name|default:"Sciences" }}</h1>
+                    <p class="text-xl">{{ category.subtitle|default:"Explorez les mystères de l'univers" }}</p>
                 </div>
             </div>
-            
-            <div class="bg-gray-100 p-4 rounded-lg text-center">
-                <p class="text-sm text-gray-600">Questions</p>
-                <p class="text-xl font-bold mt-2">10</p>
-            </div>
-            
-            <div class="bg-gray-100 p-4 rounded-lg text-center">
-                <p class="text-sm text-gray-600">XP à Gagner</p>
-                <p class="text-xl font-bold mt-2">250</p>
-            </div>
         </div>
         
-        <!-- Start Button -->
-        <div class="text-center">
-            <a href="{% url 'quiz' %}" class="inline-block bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-blue-700 transition duration-300">
-                Commencer
-            </a>
+        <div class="p-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-squiz-dark mb-4">Description</h2>
+                    <p class="text-gray-600 mb-6">
+                        {{ category.description|default:"Plongez dans le monde fascinant des sciences avec nos quiz couvrant la physique, la chimie, la biologie et bien plus encore. Testez vos connaissances et découvrez de nouveaux faits scientifiques passionnants." }}
+                    </p>
+                    
+                    <a href="{% url 'quiz' category.slug %}" 
+                       class="bg-squiz-blue text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-colors inline-flex items-center">
+                        <i class="fas fa-play mr-2"></i>
+                        Commencer le Quiz
+                    </a>
+                </div>
+                
+                <div>
+                    <h2 class="text-2xl font-bold text-squiz-dark mb-4">Statistiques</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-squiz-blue">{{ category.questions_count|default:"50" }}</div>
+                            <div class="text-sm text-gray-600">Questions</div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-green-600">{{ category.players_count|default:"1,234" }}</div>
+                            <div class="text-sm text-gray-600">Joueurs</div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-yellow-600">{{ category.average_score|default:"75" }}%</div>
+                            <div class="text-sm text-gray-600">Score moyen</div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-purple-600">{{ category.difficulty|default:"Moyen" }}</div>
+                            <div class="text-sm text-gray-600">Difficulté</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Statistics Chart -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-2xl font-bold text-squiz-dark mb-6">Statistiques détaillées</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div>
+                <h3 class="text-lg font-semibold text-squiz-dark mb-4">Distribution des scores</h3>
+                <canvas id="scoresChart" width="400" height="300"></canvas>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-squiz-dark mb-4">Activité des 30 derniers jours</h3>
+                <canvas id="activityChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Players in Category -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold text-squiz-dark mb-6">Meilleurs joueurs dans cette catégorie</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for player in top_players %}
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="relative mr-4">
+                    <img src="{{ player.avatar.url|default:'/placeholder.svg?height=50&width=50' }}" 
+                         alt="{{ player.username }}" 
+                         class="w-12 h-12 rounded-full">
+                    <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-category-{{ player.category.color }} rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-xs">{{ player.category.letter }}</span>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-semibold text-squiz-dark">{{ player.username }}</h4>
+                    <p class="text-sm text-gray-600">{{ player.category_score }}% - {{ player.xp }} XP</p>
+                </div>
+                <div class="text-2xl font-bold text-squiz-blue">#{{ forloop.counter }}</div>
+            </div>
+            {% empty %}
+            <!-- Placeholder players -->
+            {% for i in "123456" %}
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="relative mr-4">
+                    <img src="/placeholder.svg?height=50&width=50" alt="Player" class="w-12 h-12 rounded-full">
+                    <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-category-silver rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-xs">E</span>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-semibold text-squiz-dark">Joueur{{ i }}</h4>
+                    <p class="text-sm text-gray-600">{{ i }}5% - {{ i }}50 XP</p>
+                </div>
+                <div class="text-2xl font-bold text-squiz-blue">#{{ i }}</div>
+            </div>
+            {% endfor %}
+            {% endfor %}
         </div>
     </div>
 </div>
+
+<script>
+    // Scores Distribution Chart
+    const scoresCtx = document.getElementById('scoresChart').getContext('2d');
+    new Chart(scoresCtx, {
+        type: 'bar',
+        data: {
+            labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
+            datasets: [{
+                label: 'Nombre de joueurs',
+                data: [45, 120, 280, 350, 205],
+                backgroundColor: [
+                    'rgba(239, 68, 68, 0.8)',
+                    'rgba(245, 158, 11, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(139, 92, 246, 0.8)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Activity Chart
+    const activityCtx = document.getElementById('activityChart').getContext('2d');
+    new Chart(activityCtx, {
+        type: 'line',
+        data: {
+            labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'],
+            datasets: [{
+                label: 'Parties jouées',
+                data: [320, 450, 380, 520],
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}

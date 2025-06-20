@@ -1,59 +1,175 @@
 {% extends 'base.html' %}
 
-{% block title %}Connexion | QuizMaster{% endblock %}
+{% block title %}Connexion - SQUIZ{% endblock %}
 
 {% block content %}
-<div class="max-w-md mx-auto">
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <!-- Header -->
-        <div class="bg-primary text-white p-6">
-            <h1 class="text-2xl font-bold">Connexion</h1>
-            <p class="mt-2">Connectez-vous pour accéder à votre compte</p>
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="flex justify-center">
+            <div class="w-16 h-16 bg-squiz-blue rounded-full flex items-center justify-center">
+                <span class="text-white font-bold text-2xl">S</span>
+            </div>
         </div>
-        
-        <!-- Login Form -->
-        <div class="p-6">
-            <form method="post">
+        <h2 class="mt-6 text-center text-3xl font-bold text-squiz-dark">
+            Connexion à SQUIZ
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+            Bon retour parmi nous !
+        </p>
+    </div>
+
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <form class="space-y-6" method="post">
                 {% csrf_token %}
                 
                 <!-- Username -->
-                <div class="mb-4">
-                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Nom d'utilisateur</label>
-                    <input type="text" id="username" name="username" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
-                </div>
-                
-                <!-- Password -->
-                <div class="mb-6">
-                    <div class="flex justify-between items-center mb-1">
-                        <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
-                        <a href="#" class="text-sm text-primary hover:underline">Mot de passe oublié ?</a>
-                    </div>
-                    <input type="password" id="password" name="password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
-                </div>
-                
-                <!-- Remember Me -->
-                <div class="mb-6">
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="remember" class="form-checkbox text-primary">
-                        <span class="ml-2 text-sm text-gray-700">Se souvenir de moi</span>
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">
+                        Nom d'utilisateur ou email
                     </label>
+                    <div class="mt-1">
+                        <input id="username" name="username" type="text" required 
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-squiz-blue focus:border-squiz-blue"
+                               placeholder="Votre nom d'utilisateur ou email">
+                    </div>
                 </div>
-                
-                <!-- Submit Button -->
-                <div class="mb-6">
-                    <button type="submit" class="w-full bg-primary text-white font-bold py-3 px-4 rounded-full hover:bg-blue-700 transition duration-300">
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">
+                        Mot de passe
+                    </label>
+                    <div class="mt-1 relative">
+                        <input id="password" name="password" type="password" required 
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-squiz-blue focus:border-squiz-blue pr-10"
+                               placeholder="Votre mot de passe">
+                        <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                            <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember me -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember_me" name="remember_me" type="checkbox" 
+                               class="h-4 w-4 text-squiz-blue focus:ring-squiz-blue border-gray-300 rounded">
+                        <label for="remember_me" class="ml-2 block text-sm text-gray-700">
+                            Se souvenir de moi
+                        </label>
+                    </div>
+
+                    <div class="text-sm">
+                        <a href="#" id="forgot-password-link" class="font-medium text-squiz-blue hover:text-blue-600">
+                            Mot de passe oublié ?
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Submit button -->
+                <div>
+                    <button type="submit" 
+                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-squiz-blue hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-squiz-blue transition-colors">
                         Se connecter
                     </button>
                 </div>
-                
-                <!-- Register Link -->
+
+                <!-- Register link -->
                 <div class="text-center">
-                    <p class="text-sm text-gray-700">
-                        Vous n'avez pas de compte ? <a href="{% url 'singin' %}" class="text-primary hover:underline">Inscrivez-vous</a>
+                    <p class="text-sm text-gray-600">
+                        Vous n'avez pas encore de compte ?
+                        <a href="{% url 'signin' %}" class="font-medium text-squiz-blue hover:text-blue-600">
+                            S'inscrire gratuitement
+                        </a>
                     </p>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <div class="text-center">
+                <i class="fas fa-key text-squiz-blue text-3xl mb-4"></i>
+                <h3 class="text-xl font-bold text-squiz-dark mb-4">Mot de passe oublié ?</h3>
+                <p class="text-gray-600 mb-6">
+                    Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+                </p>
+                
+                <form id="forgot-password-form" class="space-y-4">
+                    <div>
+                        <input type="email" id="reset-email" placeholder="Votre adresse email" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-squiz-blue focus:border-squiz-blue">
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button type="button" id="cancel-reset" 
+                                class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+                            Annuler
+                        </button>
+                        <button type="submit" 
+                                class="flex-1 px-4 py-2 bg-squiz-blue text-white rounded-md hover:bg-blue-600 transition-colors">
+                            Envoyer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    // Password visibility toggle
+    document.getElementById('toggle-password').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const icon = this.querySelector('i');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    });
+
+    // Forgot password modal
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+    const forgotPasswordModal = document.getElementById('forgot-password-modal');
+    const cancelResetBtn = document.getElementById('cancel-reset');
+    const forgotPasswordForm = document.getElementById('forgot-password-form');
+
+    forgotPasswordLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        forgotPasswordModal.classList.remove('hidden');
+        forgotPasswordModal.classList.add('flex');
+    });
+
+    cancelResetBtn.addEventListener('click', function() {
+        forgotPasswordModal.classList.add('hidden');
+        forgotPasswordModal.classList.remove('flex');
+    });
+
+    forgotPasswordForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('reset-email').value;
+        
+        // Simulate sending reset email
+        alert('Un email de réinitialisation a été envoyé à ' + email);
+        forgotPasswordModal.classList.add('hidden');
+        forgotPasswordModal.classList.remove('flex');
+    });
+
+    // Close modal when clicking outside
+    forgotPasswordModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.add('hidden');
+            this.classList.remove('flex');
+        }
+    });
+</script>
 {% endblock %}

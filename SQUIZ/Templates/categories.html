@@ -1,30 +1,53 @@
 {% extends 'base.html' %}
 
-{% block title %}Catégories | QuizMaster{% endblock %}
+{% block title %}Catégories - SQUIZ{% endblock %}
 
 {% block content %}
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
-    <!-- Header -->
-    <div class="bg-primary text-white p-6">
-        <h1 class="text-2xl font-bold">Catégories de Quiz</h1>
-        <p class="mt-2">Choisissez une catégorie pour commencer à jouer</p>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-squiz-dark mb-4">Catégories de Quiz</h1>
+        <p class="text-xl text-gray-600">Choisissez votre domaine de prédilection et testez vos connaissances</p>
     </div>
-    
+
     <!-- Categories Grid -->
-    <div class="p-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Category Cards -->
-            {% for category in "Histoire,Géographie,Sciences,Sport,Cinéma,Musique,Art,Littérature,Technologie,Cuisine,Animaux,Nature".split %}
-            <a href="{% url 'thecategory' %}" class="block">
-                <div class="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
-                    <img src="https://via.placeholder.com/300x200" alt="{{ category }}" class="w-full h-40 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-center text-lg">{{ category }}</h3>
-                    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for category in categories %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <img src="{{ category.imge.url|default:'/placeholder.svg?height=200&width=400' }}" 
+                 alt="{{ category.name }}" 
+                 class="w-full h-48 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold text-squiz-dark mb-2">{{ category.name }}</h3>
+                <p class="text-gray-600 mb-4">{{ category.description|truncatewords:20 }}</p>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm text-gray-500">{{ category.questions_count }} questions</span>
+                    <span class="text-sm text-gray-500">{{ category.difficulty }}</span>
                 </div>
-            </a>
-            {% endfor %}
+                <a href="{% url 'thecategory' category.slug %}" 
+                   class="w-full bg-squiz-blue text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors text-center block">
+                    Voir plus
+                </a>
+            </div>
         </div>
+        {% empty %}
+        <!-- Placeholder categories -->
+        {% for category in "Sciences,Histoire,Sport,Géographie,Culture,Technologie,Littérature,Cinéma,Musique" %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <img src="/placeholder.svg?height=200&width=400" alt="{{ category }}" class="w-full h-48 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold text-squiz-dark mb-2">{{ category }}</h3>
+                <p class="text-gray-600 mb-4">Testez vos connaissances en {{ category|lower }} avec nos quiz variés et passionnants.</p>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm text-gray-500">25 questions</span>
+                    <span class="text-sm text-gray-500">Moyen</span>
+                </div>
+                <a href="#" class="w-full bg-squiz-blue text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors text-center block">
+                    Voir plus
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
